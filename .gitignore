@@ -1,2 +1,25 @@
 build
 .cache
+*.class
+# Intellij
+*.ipr
+*.iml
+*.iws
+.idea/
+
+# others
+*.jar
+*.war
+*.zip
+*.tar
+*.tar.gz
+*.pid
+*.orig
+temp/
+
+# Log file
+*.log
+log/
+
+# Mac
+.DS_Store
