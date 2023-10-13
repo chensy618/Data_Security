@@ -1,4 +1,5 @@
-package src;
+package example;
+
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;

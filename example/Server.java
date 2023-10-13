@@ -1,4 +1,5 @@
-package src;
+package example;
+
 
 import java.rmi.registry.Registry;
 import java.rmi.RemoteException;
