@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-public class Main {
+public class Register
+{
     private static final String USER_FILE = "users.txt";
     private static ArrayList<User> registeredUsers;
     public static void main(String[] args)
