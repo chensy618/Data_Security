@@ -1,3 +1,5 @@
+package src.register;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
