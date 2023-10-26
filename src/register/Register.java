@@ -56,7 +56,7 @@ public class Register
                     registerPassword = sc.next();
                 }
 
-                if (registerPassword.length() >= 6) {
+                if (registerPassword.length() >= 12) {
                     System.out.println("please input the password again：");
                     registerPassword2 = sc.next();
                     if(registerPassword.equals(registerPassword2)){
@@ -75,9 +75,9 @@ public class Register
                     }
                 } else {
                     while(true) {
-                        System.out.println("please input password with 6 digits or more：");
+                        System.out.println("please input password with 12 digits or more：");
                         registerPassword = sc.next();
-                        if(registerPassword.length() >= 6)
+                        if(registerPassword.length() >= 12)
                             break;
                     }
                 }
