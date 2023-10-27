@@ -14,10 +14,13 @@ import java.nio.file.Paths;
 import java.security.Key;
 import java.security.SecureRandom;
 
-public class FileEncryption {
+public class FileEncryption
+{
 
-    public static void main(String[] args) {
-        try {
+    public static void main(String[] args)
+    {
+        try
+        {
             // Generate a secret key
             SecretKey secretKey = generateSecretKey();
 
@@ -29,19 +32,23 @@ public class FileEncryption {
 
             System.out.println("File encryption and decryption completed.");
 
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
     }
 
-    private static SecretKey generateSecretKey() throws Exception {
+    private static SecretKey generateSecretKey() throws Exception
+    {
         // Generate a 256-bit AES key
         KeyGenerator aesKey = KeyGenerator.getInstance("AES");
         aesKey.init(256, new SecureRandom());
         return aesKey.generateKey();
     }
 
-    private static void encryptFile(String inputFile, String outputFile, Key key) throws Exception {
+    private static void encryptFile(String inputFile, String outputFile, Key key) throws Exception
+    {
         // Create cipher and initialize for encryption
         Cipher cipher = Cipher.getInstance("AES");
         cipher.init(Cipher.ENCRYPT_MODE, key);
@@ -54,7 +61,8 @@ public class FileEncryption {
         // Encrypt the file
         byte[] buffer = new byte[4096];
         int bytesRead;
-        while ((bytesRead = inputEncrypt.read(buffer)) != -1) {
+        while ((bytesRead = inputEncrypt.read(buffer)) != -1)
+        {
             cipherOutputStream.write(buffer, 0, bytesRead);
         }
 
@@ -62,20 +70,24 @@ public class FileEncryption {
         inputEncrypt.close();
         cipherOutputStream.close();
 
-        try {
+        try
+        {
             // Using java.nio.file.Files
             Path path = Paths.get(inputFile);
             Files.delete(path);
             System.out.println("Original file deleted successfully.");
 
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             e.printStackTrace();
             System.out.println("Failed to delete the original file: " + e.getMessage());
         }
 
     }
 
-    private static void decryptFile(String inputFile, String outputFile, Key key) throws Exception {
+    private static void decryptFile(String inputFile, String outputFile, Key key) throws Exception
+    {
         // Create cipher and initialize for decryption
         Cipher cipher = Cipher.getInstance("AES");
         cipher.init(Cipher.DECRYPT_MODE, key);
@@ -88,7 +100,8 @@ public class FileEncryption {
         // Decrypt the file
         byte[] buffer = new byte[4096];
         int bytesRead;
-        while ((bytesRead = cipherinputStream.read(buffer)) != -1) {
+        while ((bytesRead = cipherinputStream.read(buffer)) != -1)
+        {
             outputDecrypt.write(buffer, 0, bytesRead);
         }
 
@@ -96,13 +109,16 @@ public class FileEncryption {
         cipherinputStream.close();
         outputDecrypt.close();
 
-        try {
+        try
+        {
             // Using java.nio.file.Files
             Path path = Paths.get(inputFile);
             Files.delete(path);
             System.out.println("Encryption File deleted successfully.");
 
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             e.printStackTrace();
             System.out.println("Failed to delete the encryption file: " + e.getMessage());
         }

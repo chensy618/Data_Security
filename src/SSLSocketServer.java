@@ -8,15 +8,18 @@ import java.net.Socket;
 import java.security.KeyStore;
 
 
-
-public class SSLSocketServer {
+public class SSLSocketServer
+{
     private static String kpath = "D:\\Github\\Data_Security\\keytool\\sslserver.keystore";
     private static String tpath = "D:\\Github\\Data_Security\\keytool\\sslserver.keystore";
     private static char[] password = "123456789".toCharArray();
-    public static void main(String[] args) {
+
+    public static void main(String[] args)
+    {
         boolean flag = true;
         SSLContext context = null;
-        try {
+        try
+        {
             KeyStore ks = KeyStore.getInstance("JKS");
             ks.load(new FileInputStream(kpath), password);
             KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
@@ -29,17 +32,21 @@ public class SSLSocketServer {
             TrustManager[] tm = tmf.getTrustManagers();
             context = SSLContext.getInstance("SSL");
             context.init(km, tm, null);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
         SSLServerSocketFactory ssf = (SSLServerSocketFactory) context.getServerSocketFactory();
-        try {
+        try
+        {
             SSLServerSocket ss = (SSLServerSocket) ssf.createServerSocket(8000);
             //ss.setNeedClientAuth(true);
             //ss.setUseClientMode(true);
             //ss.setWantClientAuth(true);
             System.out.println("Server: waiting for the connection....");
-            while (flag) {
+            while (flag)
+            {
                 Socket s = ss.accept();
                 System.out.println("Server: received the request from client");
                 ObjectOutputStream os = new ObjectOutputStream(s.getOutputStream());
@@ -50,7 +57,9 @@ public class SSLSocketServer {
                 s.close();
             }
             ss.close();
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             e.printStackTrace();
         }
     }
