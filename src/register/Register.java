@@ -13,13 +13,16 @@ public class Register
 
     public static void main(String[] args)
     {
-        System.out.println(USER_FILE);
-        System.out.println(System.getProperty("user.dir"));
         registeredUsers = readUsersFromFile();
-        for (User user : registeredUsers)
-        {
-            System.out.println(user);
-        }
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Welcome to the Data Security Authentication Application");
+        System.out.println("Please register your new user account");
+        register(sc);
+    }
+
+    public String mainmenu()
+    {
+        registeredUsers = readUsersFromFile();
         String menu_select;
         Scanner sc = new Scanner(System.in);
         System.out.println("Welcome to the Data Security Authentication Application");
@@ -28,23 +31,26 @@ public class Register
         if (menu_select.equals("1"))
         {
             System.out.println("The support country：Denmark, format:Country Code(45) + Phone number ");
-            register(sc);
+            String reg = register(sc);
+            if(reg.equals("true"))
+            {
+                return "ok";
+            }
         }
         else if (menu_select.equals("2"))
         {
-            login(sc);
+            return menu_select;
         }
         else
         {
-            System.exit(0);
+            System.out.println("The support country：Denmark, format:Country Code(45) + Phone number ");
         }
+        return menu_select;
     }
 
 
-    public static void register(Scanner sc)
+    public static String register(Scanner sc)
     {
-
-
         String registerPhone = "";
         String registerPassword = "";
         String registerPassword2 = "";
@@ -119,14 +125,14 @@ public class Register
         registeredUsers.add(u);
         writeUsersToFile(registeredUsers);
         System.out.println("registration success！");
+        return "true";
 
-        login(sc);
-
+        //login(sc);
 
     }
 
 
-    public static void login(Scanner sc)
+    public void login(Scanner sc)
     {
         User u;
         String phone = "";
@@ -161,7 +167,7 @@ public class Register
                 }
             }
         }
-        System.out.println("User not found");
+        //System.out.println("User not found");
     }
 
 
@@ -213,4 +219,5 @@ public class Register
             // Handle any file writing errors
         }
     }
+
 }

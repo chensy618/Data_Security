@@ -26,4 +26,7 @@ public interface PrintService extends Remote
     boolean authenticate(String username, String password) throws RemoteException;
 
     void log(String print) throws RemoteException;
+
+    void initializeUsers() throws RemoteException;
+
 }

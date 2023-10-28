@@ -5,3 +5,12 @@ keytool -genkey -keyalg RSA -keystore server_keystore.jks -validity 365 -keysize
 
 # Generate the client truststore
 keytool -genkey -keyalg RSA -keystore client_truststore.jks -validity 365 -keysize 2048
+
+# Read keystore info
+keytool.exe -list -v -alias sslsocket -keystore e:\keytool\sslsocket.keystore
+
+#Export the server's certificate to a file.
+keytool -export -keystore serverkeystore.jks -file server.cer
+
+#Import the server's certificate into the client's truststore.
+keytool -importcert -v -alias sslsocketcer -file ./server.cer -keystore ./client_truststore.jks

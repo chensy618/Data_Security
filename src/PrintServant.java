@@ -1,9 +1,6 @@
 package src;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.*;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.security.MessageDigest;
@@ -14,7 +11,7 @@ import java.util.Map;
 public class PrintServant extends UnicastRemoteObject implements PrintService
 {
 
-    private Map<String, String> userPasswords;
+    private static Map<String, String> userPasswords;
     private static String record_file = "./systemlog.txt";
     private static PrintWriter pw = null;
 
@@ -24,12 +21,38 @@ public class PrintServant extends UnicastRemoteObject implements PrintService
         initializeUsers();
     }
 
-    private void initializeUsers()
+    @Override
+    public void initializeUsers() throws RemoteException
     {
-        // In a real application, you might read this data from a secure configuration or database
         userPasswords = new HashMap<>();
-        userPasswords.put("user1", hashPassword("password1"));
-        userPasswords.put("user2", hashPassword("password2"));
+        // In a real application, you might read this data from a secure configuration or database
+        try
+        {
+            FileReader fileReader = new FileReader("./users.txt");
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line;
+            while ((line = bufferedReader.readLine()) != null)
+            {
+                //System.out.println(line); // 打印每一行内容
+                // 在这里你可以对每一行的数据进行处理
+                String[] parts = line.split(",");
+                if (parts.length >= 2)
+                {
+                    String user = parts[0].trim();
+                    String password = parts[1].trim();
+                    userPasswords.put(user, hashPassword(password));
+                }
+            }
+            // 关闭读取流
+            bufferedReader.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+//        userPasswords = new HashMap<>();
+//        userPasswords.put("user1", hashPassword("password1"));
+//        userPasswords.put("user2", hashPassword("password2"));
         // Add more users as needed
     }
 
