@@ -11,3 +11,6 @@ system call : status
 system call : readConfig
 system call : setConfig
 system call : exit
+system call : print
+system call : queue
+system call : exit

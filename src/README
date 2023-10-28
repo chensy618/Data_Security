@@ -1,1 +1,7 @@
 This directory is for source code.
+
+# Generate the server keystore
+keytool -genkey -keyalg RSA -keystore server_keystore.jks -validity 365 -keysize 2048
+
+# Generate the client truststore
+keytool -genkey -keyalg RSA -keystore client_truststore.jks -validity 365 -keysize 2048
