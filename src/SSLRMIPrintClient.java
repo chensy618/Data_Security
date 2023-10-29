@@ -25,6 +25,7 @@ public class SSLRMIPrintClient
             Registry registry = LocateRegistry.getRegistry("localhost");
 
             PrintService printService = (PrintService) registry.lookup("PrintService");
+
             Register register = new Register();
             String ret_value = register.mainmenu();
             if(ret_value.equals("ok"))

@@ -5,6 +5,7 @@ import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -21,14 +22,14 @@ public class FileEncryption
     {
         try
         {
-            // Generate a secret key
-            SecretKey secretKey = generateSecretKey();
-
-            // Encrypt the file
-            encryptFile(".\\users.txt", ".\\encrypted.txt", secretKey);
-
-            // Decrypt the file
-            decryptFile(".\\encrypted.txt", ".\\users.txt", secretKey);
+//            // Generate a secret key
+//            SecretKey secretKey = generateSecretKey();
+//
+//            // Encrypt the file
+//            encryptFile(".\\users.txt", ".\\encrypted.txt", secretKey);
+//
+//            // Decrypt the file
+//            decryptFile(".\\encrypted.txt", ".\\users.txt", secretKey);
 
             System.out.println("File encryption and decryption completed.");
 
@@ -39,7 +40,7 @@ public class FileEncryption
         }
     }
 
-    private static SecretKey generateSecretKey() throws Exception
+    public static SecretKey generateSecretKey() throws Exception
     {
         // Generate a 256-bit AES key
         KeyGenerator aesKey = KeyGenerator.getInstance("AES");
@@ -47,7 +48,7 @@ public class FileEncryption
         return aesKey.generateKey();
     }
 
-    private static void encryptFile(String inputFile, String outputFile, Key key) throws Exception
+    public static void encryptFile(String inputFile, String outputFile, Key key) throws Exception
     {
         // Create cipher and initialize for encryption
         Cipher cipher = Cipher.getInstance("AES");
@@ -70,23 +71,10 @@ public class FileEncryption
         inputEncrypt.close();
         cipherOutputStream.close();
 
-        try
-        {
-            // Using java.nio.file.Files
-            Path path = Paths.get(inputFile);
-            Files.delete(path);
-            System.out.println("Original file deleted successfully.");
-
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-            System.out.println("Failed to delete the original file: " + e.getMessage());
-        }
 
     }
 
-    private static void decryptFile(String inputFile, String outputFile, Key key) throws Exception
+    public static void decryptFile(String inputFile, String outputFile, Key key) throws Exception
     {
         // Create cipher and initialize for decryption
         Cipher cipher = Cipher.getInstance("AES");
@@ -109,18 +97,37 @@ public class FileEncryption
         cipherinputStream.close();
         outputDecrypt.close();
 
+    }
+
+    public static void saveKeyToFile(SecretKey key, String fileName)
+    {
         try
         {
-            // Using java.nio.file.Files
-            Path path = Paths.get(inputFile);
-            Files.delete(path);
-            System.out.println("Encryption File deleted successfully.");
-
+            // 将加密后的密钥字节数组保存到文件
+            Path filePath = Paths.get(fileName);
+            Files.write(filePath, key.getEncoded());
         }
-        catch (IOException e)
+        catch (Exception e)
         {
             e.printStackTrace();
-            System.out.println("Failed to delete the encryption file: " + e.getMessage());
         }
     }
+
+    public static SecretKey readKeyFromFile(String fileName)
+    {
+        try
+        {
+            // 从文件中读取密钥的字节数组
+            byte[] encryptedKeyBytes = Files.readAllBytes(Paths.get(fileName));
+
+            // 根据解密后的密钥字节数组恢复密钥对象
+            return new SecretKeySpec(encryptedKeyBytes, "AES");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

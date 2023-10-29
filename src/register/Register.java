@@ -1,15 +1,23 @@
 package src.register;
 
+import src.FileEncryption;
+import src.PrintServant;
+import src.SSLRMIPrintServer;
+
+import javax.crypto.SecretKey;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 
 public class Register
 {
     private static final String USER_FILE = "users.txt";
     private static ArrayList<User> registeredUsers;
+
 
     public static void main(String[] args)
     {
@@ -32,7 +40,7 @@ public class Register
         {
             System.out.println("The support country：Denmark, format:Country Code(45) + Phone number ");
             String reg = register(sc);
-            if(reg.equals("true"))
+            if (reg.equals("true"))
             {
                 return "ok";
             }
@@ -125,6 +133,25 @@ public class Register
         registeredUsers.add(u);
         writeUsersToFile(registeredUsers);
         System.out.println("registration success！");
+        //FileEncryption file_encrypted = new FileEncryption();
+        SecretKey readKey = FileEncryption.readKeyFromFile("secret.key");
+        if (readKey != null)
+        {
+            // 在这里使用读取的密钥进行操作
+            System.out.println("Using private key to encrypted file: " + Arrays.toString(readKey.getEncoded()));
+        }
+        else
+        {
+            System.out.println("Failed to read key from file.");
+        }
+        try
+        {
+            FileEncryption.encryptFile(".\\users.txt", ".\\encrypted.txt", readKey);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
         return "true";
 
         //login(sc);

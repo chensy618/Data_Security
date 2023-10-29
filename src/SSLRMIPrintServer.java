@@ -1,20 +1,31 @@
 package src;
 
-import java.io.*;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.security.*;
-import java.security.cert.CertificateException;
+import javax.crypto.SecretKey;
 import javax.net.ssl.*;
 
 public class SSLRMIPrintServer
 {
+    public static SecretKey secret_key;
     public static void main(String[] args)
     {
         try
         {
             System.setProperty("javax.net.ssl.keyStore", "keytool/server_keystore.jks");
             System.setProperty("javax.net.ssl.keyStorePassword", "Data_Security_Authentication");
+
+            try
+            {
+                secret_key = FileEncryption.generateSecretKey();
+                FileEncryption.saveKeyToFile(secret_key,"secret.key");
+                FileEncryption.encryptFile(".\\users.txt", ".\\encrypted.txt", secret_key);
+                System.out.println("create private aes key : " + secret_key);
+            }
+            catch (Exception e)
+            {
+                throw new RuntimeException(e);
+            }
 
             Registry registry = LocateRegistry.createRegistry(1099);
 

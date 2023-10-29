@@ -39,3 +39,17 @@ system call : queue
 system call : exit
 system call : queue
 system call : exit
+system call : queue
+system call : exit
+system call : exit
+system call : print
+system call : queue
+system call : topQueue
+system call : start
+system call : stop
+system call : restart
+system call : status
+system call : readConfig
+system call : setConfig
+system call : exit
+system call : exit

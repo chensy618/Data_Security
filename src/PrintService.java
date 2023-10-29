@@ -1,7 +1,9 @@
 package src;
 
+import javax.crypto.SecretKey;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.security.Key;
 
 public interface PrintService extends Remote
 {
@@ -28,5 +30,6 @@ public interface PrintService extends Remote
     void log(String print) throws RemoteException;
 
     void initializeUsers() throws RemoteException;
+
 
 }

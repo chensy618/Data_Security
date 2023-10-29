@@ -1,10 +1,17 @@
 package src;
 
+import src.register.Register;
+
+import javax.crypto.SecretKey;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +21,7 @@ public class PrintServant extends UnicastRemoteObject implements PrintService
     private static Map<String, String> userPasswords;
     private static String record_file = "./systemlog.txt";
     private static PrintWriter pw = null;
+
 
     public PrintServant() throws RemoteException
     {
@@ -28,7 +36,26 @@ public class PrintServant extends UnicastRemoteObject implements PrintService
         // In a real application, you might read this data from a secure configuration or database
         try
         {
-            FileReader fileReader = new FileReader("./users.txt");
+            SecretKey readKey = FileEncryption.readKeyFromFile("secret.key");
+            if (readKey != null)
+            {
+                // 在这里使用读取的密钥进行操作
+                System.out.println("Using private key to read user info: " + Arrays.toString(readKey.getEncoded()));
+            }
+            else
+            {
+                System.out.println("Failed to read key from file.");
+            }
+            try
+            {
+                FileEncryption.decryptFile(".\\encrypted.txt", ".\\users.txt", readKey);
+            }
+            catch (Exception e)
+            {
+                throw new RuntimeException(e);
+            }
+            FileReader fileReader = new FileReader(".\\users.txt");
+
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String line;
             while ((line = bufferedReader.readLine()) != null)
