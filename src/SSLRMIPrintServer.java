@@ -12,7 +12,7 @@ public class SSLRMIPrintServer
     {
         try
         {
-            System.setProperty("javax.net.ssl.keyStore", "keytool/server_keystore.jks");
+            System.setProperty("javax.net.ssl.keyStore", "./keytool/server_keystore.jks");
             System.setProperty("javax.net.ssl.keyStorePassword", "Data_Security_Authentication");
 
             try

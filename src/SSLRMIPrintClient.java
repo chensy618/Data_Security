@@ -19,7 +19,7 @@ public class SSLRMIPrintClient
     {
         try
         {
-            System.setProperty("javax.net.ssl.trustStore", "keytool/client_truststore.jks");
+            System.setProperty("javax.net.ssl.trustStore", "./keytool/client_truststore.jks");
             System.setProperty("javax.net.ssl.trustStorePassword", "Data_Security_Authentication");
 
             Registry registry = LocateRegistry.getRegistry("localhost");
