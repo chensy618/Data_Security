@@ -77,10 +77,6 @@ public class PrintServant extends UnicastRemoteObject implements PrintService
         {
             e.printStackTrace();
         }
-//        userPasswords = new HashMap<>();
-//        userPasswords.put("user1", hashPassword("password1"));
-//        userPasswords.put("user2", hashPassword("password2"));
-        // Add more users as needed
     }
 
     private String hashPassword(String password)

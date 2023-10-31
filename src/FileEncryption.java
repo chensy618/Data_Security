@@ -8,7 +8,6 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,15 +21,6 @@ public class FileEncryption
     {
         try
         {
-//            // Generate a secret key
-//            SecretKey secretKey = generateSecretKey();
-//
-//            // Encrypt the file
-//            encryptFile(".\\users.txt", ".\\encrypted.txt", secretKey);
-//
-//            // Decrypt the file
-//            decryptFile(".\\encrypted.txt", ".\\users.txt", secretKey);
-
             System.out.println("File encryption and decryption completed.");
 
         }

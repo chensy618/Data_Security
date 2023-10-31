@@ -1,9 +1,6 @@
 package src.register;
 
 import src.FileEncryption;
-import src.PrintServant;
-import src.SSLRMIPrintServer;
-
 import javax.crypto.SecretKey;
 import java.io.*;
 import java.util.ArrayList;
@@ -194,7 +191,6 @@ public class Register
                 }
             }
         }
-        //System.out.println("User not found");
     }
 
 
