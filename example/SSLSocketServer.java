@@ -1,4 +1,4 @@
-package src;
+package example;
 
 import javax.net.ssl.*;
 import java.io.FileInputStream;

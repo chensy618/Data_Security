@@ -1,9 +1,10 @@
-package src;
+package example;
 
 import javax.net.ssl.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.net.Socket;
 import java.net.UnknownHostException;
 import java.security.KeyStore;
 
