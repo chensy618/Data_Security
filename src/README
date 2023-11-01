@@ -1,5 +1,20 @@
-This directory is for source code.
+Operation for running this program.
+1.Run the SSLRMIPrintServer.
+2.Run the SSLRMIPrintClient.
+3.Select option [1] from the menu to create a new user.
+4.If you already have the user account, you can choose option [2] from the menu to login.
+5.Use mobile phone number as username.
+6.Remember the password that you created.
+7.Continue to user login
+8.Select any options from the menu after authentication.
+9.Check the operation record from "systemlog.txt" file.
+10.User info is located in "encrypted.txt" file in ciphertext.
+11.select option [10] to exit.
+12.If you have problem about how to select options from the console menu, you could input "h" for help.
 
+
+
+Other operations about how to create the keystore file using keytool for SSL connection.
 # Generate the server keystore
 keytool -genkey -keyalg RSA -keystore server_keystore.jks -validity 365 -keysize 2048
 

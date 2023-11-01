@@ -2,12 +2,14 @@ package src;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.Arrays;
 import javax.crypto.SecretKey;
 import javax.net.ssl.*;
 
 public class SSLRMIPrintServer
 {
     public static SecretKey secret_key;
+
     public static void main(String[] args)
     {
         try
@@ -17,10 +19,22 @@ public class SSLRMIPrintServer
 
             try
             {
+                SecretKey former_key = FileEncryption.readKeyFromFile("secret.key");
+                if (former_key != null)
+                {
+                    // using private key : TO DO
+                    //System.out.println("Using private key to read user info: " + Arrays.toString(former_key.getEncoded()));
+                }
+                else
+                {
+                    System.out.println("Failed to read key from file.");
+                }
+
+                FileEncryption.decryptFile(".\\encrypted.txt", ".\\users.txt", former_key);
                 secret_key = FileEncryption.generateSecretKey();
-                FileEncryption.saveKeyToFile(secret_key,"secret.key");
+                FileEncryption.saveKeyToFile(secret_key, "secret.key");
                 FileEncryption.encryptFile(".\\users.txt", ".\\encrypted.txt", secret_key);
-                System.out.println("create private aes key : " + secret_key);
+                //System.out.println("create private aes key : " + secret_key);
             }
             catch (Exception e)
             {

@@ -40,7 +40,7 @@ public class PrintServant extends UnicastRemoteObject implements PrintService
             if (readKey != null)
             {
                 // 在这里使用读取的密钥进行操作
-                System.out.println("Using private key to read user info: " + Arrays.toString(readKey.getEncoded()));
+                //System.out.println("Using private key to read user info: " + Arrays.toString(readKey.getEncoded()));
             }
             else
             {
@@ -72,6 +72,17 @@ public class PrintServant extends UnicastRemoteObject implements PrintService
             }
             // 关闭读取流
             bufferedReader.close();
+            Path filePath = Paths.get("./users.txt");
+            try
+            {
+                // Delete the file
+                Files.delete(filePath);
+                //System.out.println("File deleted successfully!");
+            }
+            catch (IOException e)
+            {
+                System.err.println("Failed to delete the file: " + e.getMessage());
+            }
         }
         catch (IOException e)
         {

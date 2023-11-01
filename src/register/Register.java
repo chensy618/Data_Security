@@ -1,8 +1,12 @@
 package src.register;
 
 import src.FileEncryption;
+
 import javax.crypto.SecretKey;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -135,7 +139,7 @@ public class Register
         if (readKey != null)
         {
             // 在这里使用读取的密钥进行操作
-            System.out.println("Using private key to encrypted file: " + Arrays.toString(readKey.getEncoded()));
+            //System.out.println("Using private key to encrypted file: " + Arrays.toString(readKey.getEncoded()));
         }
         else
         {
@@ -148,6 +152,18 @@ public class Register
         catch (Exception e)
         {
             throw new RuntimeException(e);
+        }
+        Path filePath = Paths.get("./users.txt");
+
+        try
+        {
+            // Delete the file
+            Files.delete(filePath);
+
+        }
+        catch (IOException e)
+        {
+            System.err.println("Failed to delete the file: " + e.getMessage());
         }
         return "true";
 
@@ -174,7 +190,6 @@ public class Register
                 if (password.equals(u.getPassword()))
                 {
                     System.out.println("Login Successfully...");
-                    //System.exit(0);
                 }
                 else
                 {
@@ -185,7 +200,6 @@ public class Register
                         if (password.equals(u.getPassword()))
                         {
                             System.out.println("Login Successfully...");
-                            //System.exit(0);
                         }
                     }
                 }
@@ -197,14 +211,30 @@ public class Register
     public static boolean isMobile(String mobiles)
     {
         Pattern p = Pattern.compile("45\\d{8}");
-        //System.out.println("verify the mobile phone number");
         Matcher m = p.matcher(mobiles);
-        //System.out.println(m.matches());
         return m.matches();
     }
 
     public static ArrayList<User> readUsersFromFile()
     {
+        SecretKey readKey = FileEncryption.readKeyFromFile("secret.key");
+        if (readKey != null)
+        {
+            // 在这里使用读取的密钥进行操作
+            //System.out.println("Using private key to read user info: " + Arrays.toString(readKey.getEncoded()));
+        }
+        else
+        {
+            System.out.println("Failed to read key from file.");
+        }
+        try
+        {
+            FileEncryption.decryptFile(".\\encrypted.txt", ".\\users.txt", readKey);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
         ArrayList<User> users = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(USER_FILE)))
         {
@@ -223,6 +253,16 @@ public class Register
         catch (IOException e)
         {
             // Handle any file reading errors
+        }
+        Path filePath = Paths.get("./users.txt");
+        try
+        {
+            // Delete the file
+            Files.delete(filePath);
+        }
+        catch (IOException e)
+        {
+            System.err.println("Failed to delete the file: " + e.getMessage());
         }
         return users;
     }

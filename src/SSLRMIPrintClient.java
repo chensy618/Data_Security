@@ -2,15 +2,8 @@ package src;
 
 import src.register.Register;
 
-import javax.net.ssl.*;
-import java.io.*;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.security.KeyManagementException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
 import java.util.Scanner;
 
 public class SSLRMIPrintClient
@@ -28,7 +21,7 @@ public class SSLRMIPrintClient
 
             Register register = new Register();
             String ret_value = register.mainmenu();
-            if(ret_value.equals("ok"))
+            if (ret_value.equals("ok"))
             {
                 printService.initializeUsers();
             }
