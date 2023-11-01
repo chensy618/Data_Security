@@ -82,3 +82,38 @@ system call : exit
 system call : print
 system call : exit
 system call : status
+system call : printby4550317166
+system call : print by 4550317166
+system call : print by user account 4550317166
+system call : queue by user account 4550317166
+system call : topQueue by user account 4550317166
+system call : start by user account 4550317166
+system call : stop by user account 4550317166
+system call : restart by user account 4550317166
+system call : status by user account 4550317166
+system call : readConfig by user account 4550317166
+system call : setConfig by user account 4550317166
+system call : Wrong command by user account 4550317166
+system call : exit by user account 4550317166
+user account: 4550317166system call : print
+user account: 4550317166system call : queue
+user account: 4550317166system call : topQueue
+user account: 4550317166system call : start
+user account: 4550317166system call : stop
+user account: 4550317166system call : restart
+user account: 4550317166system call : status
+user account: 4550317166system call : readConfig
+user account: 4550317166system call : setConfig
+user account: 4550317166system call : Wrong command
+user account: 4550317166system call : exit
+user account: 4550317166, System call : print
+user account: 4550317166, System call : queue
+user account: 4550317166, System call : topQueue
+user account: 4550317166, System call : start
+user account: 4550317166, System call : stop
+user account: 4550317166, System call : restart
+user account: 4550317166, System call : status
+user account: 4550317166, System call : readConfig
+user account: 4550317166, System call : setConfig
+user account: 4550317166, System call : Wrong command
+user account: 4550317166, System call : exit

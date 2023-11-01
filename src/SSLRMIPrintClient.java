@@ -50,51 +50,51 @@ public class SSLRMIPrintClient
                             case "1":
                                 printService.print("example.pdf", "printer_DS");
                                 System.out.println("Printing file example.pdf on printer printer_DS");
-                                printService.log("print");
+                                printService.log(username,"print");
                                 break;
                             case "2":
                                 printService.queue("printer_DS");
                                 System.out.println("Listing print queue for printer printer_DS");
-                                printService.log("queue");
+                                printService.log(username,"queue");
                                 break;
                             case "3":
                                 printService.topQueue("printer_DS", 1);
                                 System.out.println("Moving job 1 to the top of the queue for printer printer_DS");
-                                printService.log("topQueue");
+                                printService.log(username,"topQueue");
                                 break;
                             case "4":
                                 printService.start();
                                 System.out.println("Starting the print server");
-                                printService.log("start");
+                                printService.log(username,"start");
                                 break;
                             case "5":
                                 printService.stop();
                                 System.out.println("Stopping the print server");
-                                printService.log("stop");
+                                printService.log(username,"stop");
                                 break;
                             case "6":
                                 printService.restart();
                                 System.out.println("Restarting the print server");
-                                printService.log("restart");
+                                printService.log(username,"restart");
                                 break;
                             case "7":
                                 printService.status("printer_DS");
                                 System.out.println("Printing status of printer printer_DS");
-                                printService.log("status");
+                                printService.log(username,"status");
                                 break;
                             case "8":
                                 printService.readConfig("config_DS");
                                 System.out.println("Reading config parameter config_DS");
-                                printService.log("readConfig");
+                                printService.log(username,"readConfig");
                                 break;
                             case "9":
                                 printService.setConfig("config_DS", "value_DS");
                                 System.out.println("Setting config parameter config_DS to value_DS ");
-                                printService.log("setConfig");
+                                printService.log(username,"setConfig");
                                 break;
                             case "10":
                                 System.out.println("Exit the Data Security Authentication System.");
-                                printService.log("exit");
+                                printService.log(username,"exit");
                                 System.exit(0);
                             case "h":
                                 System.out.println("Data Security Authentication System Help Manual.");
@@ -102,7 +102,7 @@ public class SSLRMIPrintClient
                                 break;
                             default:
                                 System.out.println("Wrong command, please input number from 1 to 10.");
-                                printService.log("exit");
+                                printService.log(username,"Wrong command");
                                 break;
                         }
                     }

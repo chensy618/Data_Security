@@ -190,14 +190,14 @@ public class PrintServant extends UnicastRemoteObject implements PrintService
     }
 
 
-    public void log(String print) throws RemoteException
+    public void log(String username,String print) throws RemoteException
     {
         try
         {
             FileOutputStream fos = new FileOutputStream(record_file, true);
             OutputStreamWriter osw = new OutputStreamWriter(fos);
             pw = new PrintWriter(osw);
-            pw.println("system call : " + print);
+            pw.println("user account: " + username + ", " + "System call : " + print);
         }
         catch (FileNotFoundException e)
         {
