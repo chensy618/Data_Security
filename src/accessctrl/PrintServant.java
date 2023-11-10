@@ -36,7 +36,7 @@ public class PrintServant extends UnicastRemoteObject implements PrintService
         // In a real application, you might read this data from a secure configuration or database
         try
         {
-            SecretKey readKey = FileEncryption.readKeyFromFile("secret.key");
+            SecretKey readKey = FileEncryption.readKeyFromFile("access_secret.key");
             if (readKey != null)
             {
                 // 在这里使用读取的密钥进行操作
@@ -48,13 +48,13 @@ public class PrintServant extends UnicastRemoteObject implements PrintService
             }
             try
             {
-                FileEncryption.decryptFile(".\\encrypted.txt", ".\\users.txt", readKey);
+                FileEncryption.decryptFile(".\\users_access_encrypted.txt", ".\\users_access.txt", readKey);
             }
             catch (Exception e)
             {
                 throw new RuntimeException(e);
             }
-            FileReader fileReader = new FileReader(".\\users.txt");
+            FileReader fileReader = new FileReader(".\\users_access.txt");
 
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String line;
@@ -72,7 +72,7 @@ public class PrintServant extends UnicastRemoteObject implements PrintService
             }
             // 关闭读取流
             bufferedReader.close();
-            Path filePath = Paths.get("./users.txt");
+            Path filePath = Paths.get("./users_access.txt");
             try
             {
                 // Delete the file

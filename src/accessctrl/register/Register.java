@@ -1,6 +1,6 @@
 package src.accessctrl.register;
 
-import src.authentication.FileEncryption;
+import src.accessctrl.FileEncryption;
 
 import javax.crypto.SecretKey;
 import java.io.*;
@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 
 public class Register
 {
-    private static final String USER_FILE = "users.txt";
+    private static final String USER_FILE = "users_access.txt";
     private static ArrayList<User> registeredUsers;
 
 
@@ -23,7 +23,7 @@ public class Register
     {
         registeredUsers = readUsersFromFile();
         Scanner sc = new Scanner(System.in);
-        System.out.println("Welcome to the Data Security Authentication Application");
+        System.out.println("Welcome to the Data Security Access control Application");
         System.out.println("Please register your new user account");
         register(sc);
     }
@@ -38,7 +38,8 @@ public class Register
         menu_select = sc.next();
         if (menu_select.equals("1"))
         {
-            System.out.println("The support country：Denmark, format:Country Code(45) + Phone number ");
+            //System.out.println("The support country：Denmark, format:Country Code(45) + Phone number ");
+            //System.out.println("Please input your username: ");
             String reg = register(sc);
             if (reg.equals("true"))
             {
@@ -59,16 +60,16 @@ public class Register
 
     public static String register(Scanner sc)
     {
-        String registerPhone = "";
+        String registerUsername = "";
         String registerPassword = "";
         String registerPassword2 = "";
 
-        System.out.println("please input the mobile phone number：");
-        registerPhone = sc.next();
+        System.out.println("please input the user name：");
+        registerUsername = sc.next();
         while (true)
         {
 
-            if (registerPhone.length() == 10 && isMobile(registerPhone))
+            if (!registerUsername.isEmpty())
             {
                 if (registerPassword.equals(""))
                 {
@@ -118,10 +119,10 @@ public class Register
             {
                 while (true)
                 {
-                    System.out.println("wrong phone number format！");
-                    System.out.println("Enter phone number again：");
-                    registerPhone = sc.next();
-                    if (registerPhone.length() == 10 && isMobile(registerPhone))
+                    System.out.println("Username should not be empty！");
+                    System.out.println("Enter username again：");
+                    registerUsername = sc.next();
+                    if (!registerUsername.isEmpty())
                     {
                         break;
                     }
@@ -129,12 +130,12 @@ public class Register
             }
         }
 
-        User u = new User(registerPhone, registerPassword);
+        User u = new User(registerUsername, registerPassword);
         registeredUsers.add(u);
         writeUsersToFile(registeredUsers);
         System.out.println("registration success！");
         //FileEncryption file_encrypted = new FileEncryption();
-        SecretKey readKey = FileEncryption.readKeyFromFile("secret.key");
+        SecretKey readKey = FileEncryption.readKeyFromFile("access_secret.key");
         if (readKey != null)
         {
             // 在这里使用读取的密钥进行操作
@@ -146,13 +147,13 @@ public class Register
         }
         try
         {
-            FileEncryption.encryptFile(".\\users.txt", ".\\encrypted.txt", readKey);
+            FileEncryption.encryptFile(".\\users_access.txt", ".\\users_access_encrypted.txt", readKey);
         }
         catch (Exception e)
         {
             throw new RuntimeException(e);
         }
-        Path filePath = Paths.get("./users.txt");
+        Path filePath = Paths.get("./users_access.txt");
 
         try
         {
@@ -176,12 +177,12 @@ public class Register
         User u;
         String phone = "";
         String password = "";
-        System.out.println("Enter Phone Number: ");
+        System.out.println("Enter the username: ");
         phone = sc.next();
 
         for (int i = 0; i < registeredUsers.size(); i++)
         {
-            if (phone.equals(registeredUsers.get(i).getPhone()))
+            if (phone.equals(registeredUsers.get(i).getUsername()))
             {
                 u = registeredUsers.get(i);
                 System.out.println("Enter password: ");
@@ -216,7 +217,7 @@ public class Register
 
     public static ArrayList<User> readUsersFromFile()
     {
-        SecretKey readKey = FileEncryption.readKeyFromFile("secret.key");
+        SecretKey readKey = FileEncryption.readKeyFromFile("access_secret.key");
         if (readKey != null)
         {
             // 在这里使用读取的密钥进行操作
@@ -228,7 +229,7 @@ public class Register
         }
         try
         {
-            FileEncryption.decryptFile(".\\encrypted.txt", ".\\users.txt", readKey);
+            FileEncryption.decryptFile(".\\users_access_encrypted.txt", ".\\users_access.txt", readKey);
         }
         catch (Exception e)
         {
@@ -253,7 +254,7 @@ public class Register
         {
             // Handle any file reading errors
         }
-        Path filePath = Paths.get("./users.txt");
+        Path filePath = Paths.get("./users_access.txt");
         try
         {
             // Delete the file
@@ -272,7 +273,7 @@ public class Register
         {
             for (User user : users)
             {
-                writer.write(user.getPhone() + "," + user.getPassword());
+                writer.write(user.getUsername() + "," + user.getPassword());
                 writer.newLine();
             }
         }

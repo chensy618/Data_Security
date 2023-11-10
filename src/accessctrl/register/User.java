@@ -2,23 +2,23 @@ package src.accessctrl.register;
 
 public class User
 {
-    private String phoneNumber;
+    private String username;
     private String password;
 
-    public User(String phoneNumber, String password)
+    public User(String username, String password)
     {
-        this.phoneNumber = phoneNumber;
+        this.username = username;
         this.password = password;
     }
 
-    public String getPhone()
+    public String getUsername()
     {
-        return phoneNumber;
+        return username;
     }
 
-    public void setPhoneNumber(String phoneNumber)
+    public void setPhoneNumber(String username)
     {
-        this.phoneNumber = phoneNumber;
+        this.username = username;
     }
 
     public String getPassword()
@@ -34,6 +34,6 @@ public class User
     @Override
     public String toString()
     {
-        return "User{" + "phoneNumber='" + phoneNumber + '\'' + ", password='" + password + '\'' + '}';
+        return "User{" + "username='" + username + '\'' + ", password='" + password + '\'' + '}';
     }
 }

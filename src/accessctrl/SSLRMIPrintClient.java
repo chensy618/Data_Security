@@ -1,6 +1,6 @@
 package src.accessctrl;
 
-import src.authentication.register.Register;
+import src.accessctrl.register.Register;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;

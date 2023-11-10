@@ -123,3 +123,14 @@ user account: 4550317166, System call : topQueue
 user account: 4550317166, System call : exit
 user account: 4550317166, System call : exit
 user account: 4550317166, System call : exit
+user account: 4550317166, System call : exit
+user account: chensy, System call : print
+user account: chensy, System call : queue
+user account: chensy, System call : topQueue
+user account: chensy, System call : start
+user account: chensy, System call : stop
+user account: chensy, System call : restart
+user account: chensy, System call : status
+user account: chensy, System call : readConfig
+user account: chensy, System call : setConfig
+user account: chensy, System call : exit
