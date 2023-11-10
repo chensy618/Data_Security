@@ -117,3 +117,9 @@ user account: 4550317166, System call : readConfig
 user account: 4550317166, System call : setConfig
 user account: 4550317166, System call : Wrong command
 user account: 4550317166, System call : exit
+user account: 4550317166, System call : print
+user account: 4550317166, System call : queue
+user account: 4550317166, System call : topQueue
+user account: 4550317166, System call : exit
+user account: 4550317166, System call : exit
+user account: 4550317166, System call : exit

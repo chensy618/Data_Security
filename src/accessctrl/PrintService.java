@@ -1,4 +1,4 @@
-package src;
+package src.accessctrl;
 
 import javax.crypto.SecretKey;
 import java.rmi.Remote;

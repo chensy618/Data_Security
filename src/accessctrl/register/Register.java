@@ -1,6 +1,6 @@
-package src.register;
+package src.accessctrl.register;
 
-import src.FileEncryption;
+import src.authentication.FileEncryption;
 
 import javax.crypto.SecretKey;
 import java.io.*;
@@ -8,7 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

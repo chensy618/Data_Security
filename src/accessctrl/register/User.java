@@ -1,4 +1,4 @@
-package src.register;
+package src.accessctrl.register;
 
 public class User
 {

@@ -1,6 +1,6 @@
-package src;
+package src.authentication;
 
-import src.register.Register;
+import src.authentication.register.Register;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
