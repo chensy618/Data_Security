@@ -46,6 +46,10 @@ public class SSLRMIPrintClient
                     while (true)
                     {
                         String user_policy = getRoleFromJson(username);
+                        if(user_policy.isEmpty())
+                        {
+                            System.out.println("This user policy doesn't exist!");
+                        }
                         System.out.println(user_policy);
                         // Continue to implement the permission that the user could user
                         // Parse the user_policy info to do the limitation
