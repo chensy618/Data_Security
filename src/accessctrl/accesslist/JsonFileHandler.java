@@ -2,60 +2,82 @@ package src.accessctrl.accesslist;
 
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.*;
 
-public class JsonFileHandler {
+public class JsonFileHandler
+{
 
-    public static void main(String[] args) throws DatabindException
+    public void main(String[] args) throws DatabindException
     {
-        AccessCtrlList accessCtrlList = new AccessCtrlList("John", "print", "ordinary_user");
-
-
-        writeToJsonFile(".//aclist_policy.json", accessCtrlList);
-
-        AccessCtrlList readAccess = readFromJsonFile(".//aclist_policy.json", AccessCtrlList.class);
-        if (readAccess != null) {
-            System.out.println("Read person from file: " + readAccess);
-        }
+        //only for test here
     }
+
     // 写入JSON文件
-    public static void writeToJsonFile(String filePath, Object data) {
-        try {
-            // 创建ObjectMapper对象
+    public void writeToJsonFile(String filePath, AccessCtrlList accessList)
+    {
+        try
+        {
+            // Create ObjectMapper object
             ObjectMapper objectMapper = new ObjectMapper();
 
-            // 将对象写入JSON文件
-            try
-            {
-                objectMapper.writeValue(new File(filePath), data);
-            }
-            catch (DatabindException e)
-            {
-                throw new RuntimeException(e);
-            }
+            // Enable pretty printing
+            objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
-            System.out.println("Data has been written to " + filePath);
-        } catch (IOException e) {
+            // Read existing data from the file, if any
+            List<Map<String, Object>> existingUsers = readUsersFromFile(filePath);
+
+            // Add the new user to the existing data
+            existingUsers.add(Map.of("username", accessList.username, "role", accessList.role, "access", accessList.method));
+
+            // Create a map with a "users" key and the list of users
+            Map<String, List<Map<String, Object>>> data = Map.of("users", existingUsers);
+
+            // Write the updated data to the JSON file using try-with-resources
+            try (var fileWriter = new FileWriter(filePath))
+            {
+                objectMapper.writeValue(fileWriter, data);
+                System.out.println("User has been added to " + filePath);
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException("IO error while writing to file: " + e.getMessage(), e);
+            }
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
     }
 
     // 从JSON文件读取数据
-    public static <T> T readFromJsonFile(String filePath, Class<T> valueType) throws DatabindException
+    public List<Map<String, Object>> readUsersFromFile(String filePath)
     {
-        try {
-            // 创建ObjectMapper对象
+        try
+        {
             ObjectMapper objectMapper = new ObjectMapper();
+            File file = new File(filePath);
 
-            // 从JSON文件读取数据
-            T data = objectMapper.readValue(new File(filePath), valueType);
+            // If the file doesn't exist or is empty, return a new Arraylist
+            // notice : here you could not return an empty list, you must return the data structure.
+            if (!file.exists() || file.length() == 0)
+            {
+                return new ArrayList<>();
+            }
 
-            return data;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+            // Read the existing data from the file
+            Map<String, List<Map<String, Object>>> data = objectMapper.readValue(file, objectMapper.getTypeFactory().constructParametricType(Map.class, String.class, List.class));
+
+            // Extract the list of users from the "users" key
+            return data.getOrDefault("users", new ArrayList<>());
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException("Error reading from file: " + e.getMessage(), e);
         }
     }
 

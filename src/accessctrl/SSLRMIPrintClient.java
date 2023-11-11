@@ -1,9 +1,12 @@
 package src.accessctrl;
 
+import src.accessctrl.accesslist.JsonFileHandler;
 import src.accessctrl.register.Register;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class SSLRMIPrintClient
@@ -42,6 +45,11 @@ public class SSLRMIPrintClient
                     // Use printService to invoke print server operations
                     while (true)
                     {
+                        String user_policy = getRoleFromJson(username);
+                        System.out.println(user_policy);
+                        // Continue to implement the permission that the user could user
+                        // Parse the user_policy info to do the limitation
+                        //TODO
                         System.out.println("Data Security Menu -- [1]:print,[2]:queue,[3]:topQueue,[4]:start,[5]:stop,[6]:restart,[7]:status,[8]:readConfig,[9]:setConfig,[10]:exit,[h]:help. ");
                         Scanner scaninput = new Scanner(System.in);
                         String option = scaninput.nextLine();
@@ -50,51 +58,51 @@ public class SSLRMIPrintClient
                             case "1":
                                 printService.print("example.pdf", "printer_DS");
                                 System.out.println("Printing file example.pdf on printer printer_DS");
-                                printService.log(username,"print");
+                                printService.log(username, "print");
                                 break;
                             case "2":
                                 printService.queue("printer_DS");
                                 System.out.println("Listing print queue for printer printer_DS");
-                                printService.log(username,"queue");
+                                printService.log(username, "queue");
                                 break;
                             case "3":
                                 printService.topQueue("printer_DS", 1);
                                 System.out.println("Moving job 1 to the top of the queue for printer printer_DS");
-                                printService.log(username,"topQueue");
+                                printService.log(username, "topQueue");
                                 break;
                             case "4":
                                 printService.start();
                                 System.out.println("Starting the print server");
-                                printService.log(username,"start");
+                                printService.log(username, "start");
                                 break;
                             case "5":
                                 printService.stop();
                                 System.out.println("Stopping the print server");
-                                printService.log(username,"stop");
+                                printService.log(username, "stop");
                                 break;
                             case "6":
                                 printService.restart();
                                 System.out.println("Restarting the print server");
-                                printService.log(username,"restart");
+                                printService.log(username, "restart");
                                 break;
                             case "7":
                                 printService.status("printer_DS");
                                 System.out.println("Printing status of printer printer_DS");
-                                printService.log(username,"status");
+                                printService.log(username, "status");
                                 break;
                             case "8":
                                 printService.readConfig("config_DS");
                                 System.out.println("Reading config parameter config_DS");
-                                printService.log(username,"readConfig");
+                                printService.log(username, "readConfig");
                                 break;
                             case "9":
                                 printService.setConfig("config_DS", "value_DS");
                                 System.out.println("Setting config parameter config_DS to value_DS ");
-                                printService.log(username,"setConfig");
+                                printService.log(username, "setConfig");
                                 break;
                             case "10":
                                 System.out.println("Exit the Data Security Authentication System.");
-                                printService.log(username,"exit");
+                                printService.log(username, "exit");
                                 System.exit(0);
                             case "h":
                                 System.out.println("Data Security Authentication System Help Manual.");
@@ -102,7 +110,7 @@ public class SSLRMIPrintClient
                                 break;
                             default:
                                 System.out.println("Wrong command, please input number from 1 to 10.");
-                                printService.log(username,"Wrong command");
+                                printService.log(username, "Wrong command");
                                 break;
                         }
                     }
@@ -118,4 +126,22 @@ public class SSLRMIPrintClient
             e.printStackTrace();
         }
     }
+
+    public static String getRoleFromJson(String username)
+    {
+        String userInfo = null;
+        JsonFileHandler jsonFileHandler = new JsonFileHandler();
+        List<Map<String, Object>> users = jsonFileHandler.readUsersFromFile(".//aclist_policy.json");
+        for (Map<String, Object> user : users)
+        {
+            if (!user.get("username").equals(username))
+            {
+                continue;
+            }
+            userInfo = String.format("User: %s, Role: %s, Access: %s", user.get("username"), user.get("role"), user.get("access"));
+            break;
+        }
+        return userInfo;
+    }
+
 }

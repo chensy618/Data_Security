@@ -35,20 +35,7 @@ public class SSLRMIPrintServer
                 secret_key = FileEncryption.generateSecretKey();
                 FileEncryption.saveKeyToFile(secret_key, "access_secret.key");
                 FileEncryption.encryptFile(".\\users_access.txt", ".\\users_access_encrypted.txt", secret_key);
-                //System.out.println("create private aes key : " + secret_key);
-//                boolean exist_flag = checkFileExists(".\\users_access_encrypted.txt");
-//                if (exist_flag)
-//                {
-//                    FileEncryption.decryptFile(".\\users_access_encrypted.txt", ".\\users_access.txt", former_key);
-//                    secret_key = FileEncryption.generateSecretKey();
-//                    FileEncryption.saveKeyToFile(secret_key, "secret.key");
-//                    FileEncryption.encryptFile(".\\users_access.txt", ".\\users_access_encrypted.txt", secret_key);
-//                    //System.out.println("create private aes key : " + secret_key);
-//                }
-//                else
-//                {
-//                    createFile(".\\users_access_encrypted.txt");
-//                }
+
             }
             catch (Exception e)
             {
@@ -71,18 +58,21 @@ public class SSLRMIPrintServer
             e.printStackTrace();
         }
     }
+
     public static boolean checkFileExists(String filePath)
     {
         File file = new File(filePath);
         return file.exists();
     }
+
     public static boolean createFile(String filePath) throws IOException
     {
         // 创建File对象
         File file = new File(filePath);
 
         // 检查文件是否已存在
-        if (file.exists()) {
+        if (file.exists())
+        {
             return false; // 文件已存在，无法创建
         }
 

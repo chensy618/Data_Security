@@ -190,7 +190,7 @@ public class PrintServant extends UnicastRemoteObject implements PrintService
     }
 
 
-    public void log(String username,String print) throws RemoteException
+    public void log(String username, String print) throws RemoteException
     {
         try
         {

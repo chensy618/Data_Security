@@ -1,6 +1,9 @@
 package src.accessctrl.register;
 
+import com.fasterxml.jackson.databind.DatabindException;
 import src.accessctrl.FileEncryption;
+import src.accessctrl.accesslist.AccessCtrlList;
+import src.accessctrl.accesslist.JsonFileHandler;
 
 import javax.crypto.SecretKey;
 import java.io.*;
@@ -8,6 +11,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,12 +23,17 @@ public class Register
     private static final String USER_FILE = "users_access.txt";
     private static ArrayList<User> registeredUsers;
 
+    private static List<String> manager_access = Collections.singletonList("print,queue,topQueue,start,stop,restart,status,readConfig,setConfig");
+    private static List<String> technician_access = Collections.singletonList("start,stop,restart,status,readConfig,setConfig");
+    private static List<String> power_access = Collections.singletonList("print,queue,restart,topQueue");
+    private static List<String> ordinary_access = Collections.singletonList("print,queue");
+
 
     public static void main(String[] args)
     {
         registeredUsers = readUsersFromFile();
         Scanner sc = new Scanner(System.in);
-        System.out.println("Welcome to the Data Security Access control Application");
+        System.out.println("Welcome to the Data Security Access Control Application");
         System.out.println("Please register your new user account");
         register(sc);
     }
@@ -33,7 +43,7 @@ public class Register
         registeredUsers = readUsersFromFile();
         String menu_select;
         Scanner sc = new Scanner(System.in);
-        System.out.println("Welcome to the Data Security Authentication Application");
+        System.out.println("Welcome to the Data Security Access Control Application");
         System.out.println("Please choose [1]:register or [2]:login");
         menu_select = sc.next();
         if (menu_select.equals("1"))
@@ -63,6 +73,7 @@ public class Register
         String registerUsername = "";
         String registerPassword = "";
         String registerPassword2 = "";
+        String registerRole = "";
 
         System.out.println("please input the user name：");
         registerUsername = sc.next();
@@ -83,6 +94,15 @@ public class Register
                     registerPassword2 = sc.next();
                     if (registerPassword.equals(registerPassword2))
                     {
+                        while (true)
+                        {
+                            System.out.println("please choose the register role:[manager],[technician],[power],[ordinary]");
+                            registerRole = sc.next();
+                            if (registerRole.equals("manager") || registerRole.equals("technician") || registerRole.equals("power") || registerRole.equals("ordinary"))
+                            {
+                                break;
+                            }
+                        }
                         break;
                     }
                     else
@@ -98,6 +118,7 @@ public class Register
                             }
 
                         }
+
                         break;
                     }
                 }
@@ -130,11 +151,11 @@ public class Register
             }
         }
 
-        User u = new User(registerUsername, registerPassword);
+        User u = new User(registerUsername, registerPassword, registerRole);
         registeredUsers.add(u);
         writeUsersToFile(registeredUsers);
+        writejson(registerUsername, registerRole);
         System.out.println("registration success！");
-        //FileEncryption file_encrypted = new FileEncryption();
         SecretKey readKey = FileEncryption.readKeyFromFile("access_secret.key");
         if (readKey != null)
         {
@@ -171,6 +192,30 @@ public class Register
 
     }
 
+    public static void writejson(String name, String role)
+    {
+        JsonFileHandler jsonFileHandler = new JsonFileHandler();
+        AccessCtrlList accessCtrlList = new AccessCtrlList(name, ordinary_access, role);
+        if (role.equals("manager"))
+        {
+            accessCtrlList.setMethod(manager_access);
+        }
+        else if (role.equals("technician"))
+        {
+            accessCtrlList.setMethod(technician_access);
+        }
+        else if (role.equals("power"))
+        {
+            accessCtrlList.setMethod(power_access);
+        }
+        else if (role.equals("ordinary"))
+        {
+            accessCtrlList.setMethod(ordinary_access);
+        }
+        accessCtrlList.setName(name);
+        accessCtrlList.setRole(role);
+        jsonFileHandler.writeToJsonFile(".//aclist_policy.json", accessCtrlList);
+    }
 
     public void login(Scanner sc)
     {
@@ -242,11 +287,12 @@ public class Register
             while ((line = reader.readLine()) != null)
             {
                 String[] parts = line.split(",");
-                if (parts.length == 2)
+                if (parts.length == 3)
                 {
                     String phone = parts[0];
                     String password = parts[1];
-                    users.add(new User(phone, password));
+                    String role = parts[2];
+                    users.add(new User(phone, password, role));
                 }
             }
         }
@@ -273,7 +319,7 @@ public class Register
         {
             for (User user : users)
             {
-                writer.write(user.getUsername() + "," + user.getPassword());
+                writer.write(user.getUsername() + "," + user.getPassword() + "," + user.getRole());
                 writer.newLine();
             }
         }
