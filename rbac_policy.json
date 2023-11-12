@@ -1,0 +1,20 @@
+{
+    "roles" : [
+      {
+        "role": "manager" ,
+        "access": ["print","queue", "restart", "topQueue","start","stop","restart","status","readConfig","setConfig" ]
+      },
+      {
+        "role": "technician" ,
+        "access": ["start","stop","restart","status","readConfig","setConfig"]
+      },
+      {
+        "role": "power" ,
+        "access": ["print","queue", "restart", "topQueue"]
+      },
+      {
+        "role": "ordinary" ,
+        "access": ["print", "queue"]
+      }
+    ]
+  }
