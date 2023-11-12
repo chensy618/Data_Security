@@ -9,7 +9,6 @@ build
 .idea/
 
 # others
-*.jar
 *.war
 *.zip
 *.tar
