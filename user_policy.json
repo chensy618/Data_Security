@@ -1,0 +1,25 @@
+{
+  "users" : [ {
+    "username" : "Alice",
+    "role" : "manager"
+  }, {
+    "username" : "Bob",
+    "role" : "technician"
+  }, {
+    "username" : "Cecilie",
+    "role" : "power"
+  }, {
+    "username" : "David",
+    "role" : "ordinary"
+  }, {
+    "username" : "Erica",
+    "role" : "ordinary"
+  }, {
+    "username" : "Fred",
+    "role" : "ordinary"
+  }, {
+    "username" : "George",
+    "role" : "ordinary"
+  }
+  ]
+}

@@ -5,11 +5,14 @@ import src.accessctrl.accesslist.JsonFileHandler;
 import src.accessctrl.register.Register;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DatabindException;
 
+import java.io.File;
 import java.io.IOException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -43,21 +46,20 @@ public class SSLRMIPrintClient
                 String password = scanner.nextLine();
 
                 // Authenticate user
-
                 if (printService.authenticate(username, password))
                 {
                     // Use printService to invoke print server operations
                     while (true) {
-                        String user_policy = getRoleFromJson(username);
-                        if (user_policy.isEmpty()) {
-                            System.out.println("This user policy doesn't exist!");
-                        }
-                        System.out.println(user_policy);
+                        //String user_policy = getRoleFromJson(username);
+                        //if (user_policy.isEmpty()) {
+                        //    System.out.println("This user policy doesn't exist!");
+                        //}
+                        //System.out.println(user_policy);
                         System.out.println("Data Security Menu -- [1]:print,[2]:queue,[3]:topQueue,[4]:start,[5]:stop,[6]:restart,[7]:status,[8]:readConfig,[9]:setConfig,[10]:exit,[h]:help. ");
                         Scanner scaninput = new Scanner(System.in);
                         String option = scaninput.nextLine();
                         // Check if the user has access to the selected operation
-                        if (hasAccess(user_policy, option)) {
+                        if (hasAccess(username, convertOption(option))) {
                             switch (option) {
                                 case "1":
                                     printService.print("example.pdf", "printer_DS");
@@ -132,55 +134,96 @@ public class SSLRMIPrintClient
         }
     }
 
-    public static String getRoleFromJson(String username)
-    {
-        String userInfo = null;
-        JsonFileHandler jsonFileHandler = new JsonFileHandler();
-        List<Map<String, Object>> users = jsonFileHandler.readUsersFromFile(".//aclist_policy.json");
-        for (Map<String, Object> user : users)
-        {
-            if (!user.get("username").equals(username))
-            {
-                continue;
-            }
-            userInfo = String.format("User: %s, Role: %s, Access: %s", user.get("username"), user.get("role"), user.get("access"));
-            break;
-        }
-        return userInfo;
-    }
+    //public static String getRoleFromJson(String username)
+    //{
+    //    String userInfo = null;
+    //    JsonFileHandler jsonFileHandler = new JsonFileHandler();
+    //    List<Map<String, Object>> users = jsonFileHandler.readUsersFromFile("/Users/nicolaiveiglinarends/Desktop/github_cloned/Data_Security/aclist_policy.json");
+    //    for (Map<String, Object> user : users)
+    //    {
+    //        if (!user.get("username").equals(username))
+    //        {
+    //            continue;
+    //        }
+    //        userInfo = String.format("User: %s, Role: %s, Access: %s", user.get("username"), user.get("role"), user.get("access"));
+    //        break;
+    //    }
+    //    return userInfo;
+    //}
 
-    private static boolean hasAccess(String userInfo, String operation) {
-    // Parse the user info and check if the user has access to the specific operation
-    // You may need to modify this logic based on the structure of your user info
-
-    if (userInfo == null) {
-        return false;
-    }
-
-    // Convert the operation to lowercase for case-insensitive comparison
-    String lowercaseOperation = operation.toLowerCase();
-
-    // Parse the user info JSON string or use your preferred method
-    // Here, assuming a simple JSON structure
+    private static boolean hasAccess(String username, String operation) {
     try {
+        if (operation.equalsIgnoreCase("unknown")) {
+            return true;
+        }
+        
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode userInfoNode = objectMapper.readTree(userInfo);
 
-        JsonNode accessList = userInfoNode.get("access");
-        if (accessList != null && accessList.isArray()) {
-            for (JsonNode access : accessList) {
-                if (access.asText().toLowerCase().equals(lowercaseOperation)) {
-                    return true;
-                }
+        // Read RBAC policy
+        JsonNode rbacPolicyNode = objectMapper.readTree(new File(".\\rbac_policy.json"));
+        Map<String, List<String>> roleAccessMap = new HashMap<>();
+
+        // Extract role and access rights from RBAC policy
+        for (JsonNode roleNode : rbacPolicyNode.get("roles")) {
+            String role = roleNode.get("role").asText();
+            List<String> accessRights = objectMapper.readValue(
+                roleNode.get("access").traverse(),
+                new TypeReference<List<String>>() {}
+            );
+            roleAccessMap.put(role, accessRights);
+        }
+
+        // Read user policy
+        JsonNode userPolicyNode = objectMapper.readTree(new File(".\\user_policy.json"));
+
+        // Find user's role
+        String userRole = null;
+        for (JsonNode userNode : userPolicyNode.get("users")) {
+            if (userNode.get("username").asText().equals(username)) {
+                userRole = userNode.get("role").asText();
+                break;
             }
         }
 
-        return false; // Default to false if no match found
+        // Check if user has the required access rights for the operation
+        if (userRole != null && roleAccessMap.containsKey(userRole)) {
+            List<String> userAccessRights = roleAccessMap.get(userRole);
+            return userAccessRights.contains(operation);
+        }
+
+        return false;
     } catch (IOException e) {
         e.printStackTrace();
         return false;
     }
 }
 
+private static String convertOption(String option) {
+    switch (option) {
+        case "1":
+            return "print";
+        case "2":
+            return "queue";
+        case "3":
+            return "topQueue";
+        case "4":
+            return "start";
+        case "5":
+            return "stop";
+        case "6":
+            return "restart";
+        case "7":
+            return "status";
+        case "8":
+            return "readConfig";
+        case "9":
+            return "setConfig";
+        default:
+            return "unknown";
+    }
+}
+
 
 }
+
+
