@@ -1,5 +1,6 @@
 package src.accessctrl;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import src.accessctrl.accesslist.JsonFileHandler;
 import src.accessctrl.register.Register;
 
