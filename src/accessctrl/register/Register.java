@@ -1,6 +1,9 @@
 package src.accessctrl.register;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import src.accessctrl.FileEncryption;
 import src.accessctrl.accesslist.AccessCtrlList;
 import src.accessctrl.accesslist.JsonFileHandler;
@@ -10,10 +13,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,10 +23,10 @@ public class Register
     private static final String USER_FILE = "users_access.txt";
     private static ArrayList<User> registeredUsers;
 
-    private static List<String> manager_access = Collections.singletonList("print,queue,topQueue,start,stop,restart,status,readConfig,setConfig");
-    private static List<String> technician_access = Collections.singletonList("start,stop,restart,status,readConfig,setConfig");
-    private static List<String> power_access = Collections.singletonList("print,queue,restart,topQueue");
-    private static List<String> ordinary_access = Collections.singletonList("print,queue");
+//    private static List<String> manager_access = Collections.singletonList("print,queue,topQueue,start,stop,restart,status,readConfig,setConfig");
+//    private static List<String> technician_access = Collections.singletonList("start,stop,restart,status,readConfig,setConfig");
+//    private static List<String> power_access = Collections.singletonList("print,queue,restart,topQueue");
+//    private static List<String> ordinary_access = Collections.singletonList("print,queue");
 
 
     public static void main(String[] args)
@@ -174,7 +174,7 @@ public class Register
         {
             throw new RuntimeException(e);
         }
-        Path filePath = Paths.get("./users_access.txt");
+        Path filePath = Paths.get(".\\users_access.txt");
 
         try
         {
@@ -192,29 +192,67 @@ public class Register
 
     }
 
+    public static List<String> getAccess(String role)
+    {
+        List<String> accessRights = null;
+        try
+        {
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            // Read RBAC policy
+            JsonNode rbacPolicyNode = objectMapper.readTree(new File(".\\rbac_policy.json"));
+
+            // Extract role and access rights from RBAC policy
+            for (JsonNode roleNode : rbacPolicyNode.get("roles"))
+            {
+                String role_js = roleNode.get("role").asText();
+                if (role.equals(role_js))
+                {
+                    accessRights = objectMapper.readValue(roleNode.get("access").traverse(), new TypeReference<List<String>>()
+                    {
+                    });
+                    //System.out.println(accessRights);
+                    break;
+                }
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return accessRights;
+    }
+
     public static void writejson(String name, String role)
     {
+        List<String> role_access = null;
+        //set default access : ordinary
+        role_access = getAccess("ordinary");
         JsonFileHandler jsonFileHandler = new JsonFileHandler();
-        AccessCtrlList accessCtrlList = new AccessCtrlList(name, ordinary_access, role);
+        AccessCtrlList accessCtrlList = new AccessCtrlList(name, role_access, role);
         if (role.equals("manager"))
         {
-            accessCtrlList.setMethod(manager_access);
+            role_access = getAccess(role);
+            accessCtrlList.setMethod(role_access);
         }
         else if (role.equals("technician"))
         {
-            accessCtrlList.setMethod(technician_access);
+            role_access = getAccess(role);
+            accessCtrlList.setMethod(role_access);
         }
         else if (role.equals("power"))
         {
-            accessCtrlList.setMethod(power_access);
+            role_access = getAccess(role);
+            accessCtrlList.setMethod(role_access);
         }
         else if (role.equals("ordinary"))
         {
-            accessCtrlList.setMethod(ordinary_access);
+            role_access = getAccess(role);
+            accessCtrlList.setMethod(role_access);
         }
         accessCtrlList.setName(name);
         accessCtrlList.setRole(role);
-        jsonFileHandler.writeToJsonFile(".//aclist_policy.json", accessCtrlList);
+        jsonFileHandler.writeToJsonFile(".\\aclist_policy_dynamic.json", accessCtrlList);
     }
 
     public void login(Scanner sc)
@@ -300,7 +338,7 @@ public class Register
         {
             // Handle any file reading errors
         }
-        Path filePath = Paths.get("./users_access.txt");
+        Path filePath = Paths.get(".\\users_access.txt");
         try
         {
             // Delete the file

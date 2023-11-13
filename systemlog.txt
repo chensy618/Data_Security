@@ -136,3 +136,18 @@ user account: chensy, System call : setConfig
 user account: chensy, System call : exit
 user account: siyan, System call : exit
 user account: chensy123, System call : exit
+user account: sslcsy, System call : exit
+user account: Alice, System call : queue
+user account: Alice, System call : exit
+user account: Alice, System call : Wrong command
+user account: Alice, System call : exit
+user account: siyan, System call : setConfig
+user account: siyan, System call : Wrong command
+user account: siyan, System call : start
+user account: siyan, System call : stop
+user account: siyan, System call : exit
+user account: kikikkikiki, System call : print
+user account: kikikkikiki, System call : queue
+user account: kikikkikiki, System call : topQueue
+user account: kikikkikiki, System call : restart
+user account: kikikkikiki, System call : exit

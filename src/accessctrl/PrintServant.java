@@ -19,7 +19,7 @@ public class PrintServant extends UnicastRemoteObject implements PrintService
 {
 
     private static Map<String, String> userPasswords;
-    private static String record_file = "./systemlog.txt";
+    private static String record_file = ".\\systemlog.txt";
     private static PrintWriter pw = null;
 
 
@@ -72,7 +72,7 @@ public class PrintServant extends UnicastRemoteObject implements PrintService
             }
             // 关闭读取流
             bufferedReader.close();
-            Path filePath = Paths.get("./users_access.txt");
+            Path filePath = Paths.get(".\\users_access.txt");
             try
             {
                 // Delete the file

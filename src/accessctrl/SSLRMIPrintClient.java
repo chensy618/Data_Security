@@ -23,7 +23,7 @@ public class SSLRMIPrintClient
     {
         try
         {
-            System.setProperty("javax.net.ssl.trustStore", "./keytool/client_truststore.jks");
+            System.setProperty("javax.net.ssl.trustStore", ".\\keytool\\client_truststore.jks");
             System.setProperty("javax.net.ssl.trustStorePassword", "Data_Security_Authentication");
 
             Registry registry = LocateRegistry.getRegistry("localhost");
@@ -134,22 +134,22 @@ public class SSLRMIPrintClient
         }
     }
 
-    //public static String getRoleFromJson(String username)
-    //{
-    //    String userInfo = null;
-    //    JsonFileHandler jsonFileHandler = new JsonFileHandler();
-    //    List<Map<String, Object>> users = jsonFileHandler.readUsersFromFile("/Users/nicolaiveiglinarends/Desktop/github_cloned/Data_Security/aclist_policy.json");
-    //    for (Map<String, Object> user : users)
-    //    {
-    //        if (!user.get("username").equals(username))
-    //        {
-    //            continue;
-    //        }
-    //        userInfo = String.format("User: %s, Role: %s, Access: %s", user.get("username"), user.get("role"), user.get("access"));
-    //        break;
-    //    }
-    //    return userInfo;
-    //}
+//    public static String getRoleFromJson(String username)
+//    {
+//        String userInfo = null;
+//        JsonFileHandler jsonFileHandler = new JsonFileHandler();
+//        List<Map<String, Object>> users = jsonFileHandler.readUsersFromFile(".\\aclist_policy.json");
+//        for (Map<String, Object> user : users)
+//        {
+//            if (!user.get("username").equals(username))
+//            {
+//                continue;
+//            }
+//            userInfo = String.format("User: %s, Role: %s, Access: %s", user.get("username"), user.get("role"), user.get("access"));
+//            break;
+//        }
+//        return userInfo;
+//    }
 
     private static boolean hasAccess(String username, String operation) {
     try {
@@ -160,11 +160,11 @@ public class SSLRMIPrintClient
         ObjectMapper objectMapper = new ObjectMapper();
 
         // Read RBAC policy
-        JsonNode rbacPolicyNode = objectMapper.readTree(new File(".\\rbac_policy.json"));
+        JsonNode rbacPolicyNode = objectMapper.readTree(new File(".\\aclist_policy_dynamic.json"));
         Map<String, List<String>> roleAccessMap = new HashMap<>();
 
         // Extract role and access rights from RBAC policy
-        for (JsonNode roleNode : rbacPolicyNode.get("roles")) {
+        for (JsonNode roleNode : rbacPolicyNode.get("users")) {
             String role = roleNode.get("role").asText();
             List<String> accessRights = objectMapper.readValue(
                 roleNode.get("access").traverse(),
@@ -174,7 +174,7 @@ public class SSLRMIPrintClient
         }
 
         // Read user policy
-        JsonNode userPolicyNode = objectMapper.readTree(new File(".\\user_policy.json"));
+        JsonNode userPolicyNode = objectMapper.readTree(new File(".\\aclist_policy_dynamic.json"));
 
         // Find user's role
         String userRole = null;

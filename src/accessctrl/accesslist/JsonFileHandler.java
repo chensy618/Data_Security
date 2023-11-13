@@ -41,7 +41,7 @@ public class JsonFileHandler
             try (var fileWriter = new FileWriter(filePath))
             {
                 objectMapper.writeValue(fileWriter, data);
-                System.out.println("User has been added to " + filePath);
+                //System.out.println("User has been added to " + filePath);
             }
             catch (IOException e)
             {
