@@ -1,7 +1,0 @@
-{
-  "users" : [ {
-    "access" : [ "print", "queue", "restart", "topQueue" ],
-    "username" : "kikikkikiki",
-    "role" : "power"
-  } ]
-}

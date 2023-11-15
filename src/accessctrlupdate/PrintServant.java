@@ -1,6 +1,4 @@
-package src.accessctrl;
-
-import src.accessctrl.register.Register;
+package src.accessctrlupdate;
 
 import javax.crypto.SecretKey;
 import java.io.*;
@@ -11,7 +9,6 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +33,7 @@ public class PrintServant extends UnicastRemoteObject implements PrintService
         // In a real application, you might read this data from a secure configuration or database
         try
         {
-            SecretKey readKey = FileEncryption.readKeyFromFile("access_secret.key");
+            SecretKey readKey = FileEncryption.readKeyFromFile(".\\src\\accessctrlupdate\\access_secret.key");
             if (readKey != null)
             {
                 // 在这里使用读取的密钥进行操作
@@ -48,13 +45,13 @@ public class PrintServant extends UnicastRemoteObject implements PrintService
             }
             try
             {
-                FileEncryption.decryptFile(".\\users_access_encrypted.txt", ".\\users_access.txt", readKey);
+                FileEncryption.decryptFile(".\\src\\accessctrlupdate\\users_access_encrypted.txt", ".\\src\\accessctrlupdate\\users_access.txt", readKey);
             }
             catch (Exception e)
             {
                 throw new RuntimeException(e);
             }
-            FileReader fileReader = new FileReader(".\\users_access.txt");
+            FileReader fileReader = new FileReader(".\\src\\accessctrlupdate\\users_access.txt");
 
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String line;
@@ -72,7 +69,7 @@ public class PrintServant extends UnicastRemoteObject implements PrintService
             }
             // 关闭读取流
             bufferedReader.close();
-            Path filePath = Paths.get(".\\users_access.txt");
+            Path filePath = Paths.get(".\\src\\accessctrlupdate\\users_access.txt");
             try
             {
                 // Delete the file

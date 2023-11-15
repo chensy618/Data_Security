@@ -1,5 +1,7 @@
-package src.authentication;
+package src.accessctrltask1;
 
+import java.io.File;
+import java.io.IOException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import javax.crypto.SecretKey;
@@ -13,12 +15,12 @@ public class SSLRMIPrintServer
     {
         try
         {
-            System.setProperty("javax.net.ssl.keyStore", "./keytool/server_keystore.jks");
+            System.setProperty("javax.net.ssl.keyStore", ".\\keytool\\server_keystore.jks");
             System.setProperty("javax.net.ssl.keyStorePassword", "Data_Security_Authentication");
 
             try
             {
-                SecretKey former_key = FileEncryption.readKeyFromFile(".\\src\\authentication\\secret.key");
+                SecretKey former_key = FileEncryption.readKeyFromFile(".\\src\\accessctrltask1\\access_secret.key");
                 if (former_key != null)
                 {
                     // using private key : TO DO
@@ -28,12 +30,11 @@ public class SSLRMIPrintServer
                 {
                     System.out.println("Failed to read key from file.");
                 }
-
-                FileEncryption.decryptFile(".\\src\\authentication\\encrypted.txt", ".\\src\\authentication\\users.txt", former_key);
+                FileEncryption.decryptFile(".\\src\\accessctrltask1\\access_encrypted.txt", ".\\src\\accessctrltask1\\access_task1.txt", former_key);
                 secret_key = FileEncryption.generateSecretKey();
-                FileEncryption.saveKeyToFile(secret_key, ".\\src\\authentication\\secret.key");
-                FileEncryption.encryptFile(".\\src\\authentication\\users.txt", ".\\src\\authentication\\encrypted.txt", secret_key);
-                //System.out.println("create private aes key : " + secret_key);
+                FileEncryption.saveKeyToFile(secret_key, ".\\src\\accessctrltask1\\access_secret.key");
+                FileEncryption.encryptFile(".\\src\\accessctrltask1\\access_task1.txt", ".\\src\\accessctrltask1\\access_encrypted.txt", secret_key);
+
             }
             catch (Exception e)
             {
@@ -55,5 +56,26 @@ public class SSLRMIPrintServer
         {
             e.printStackTrace();
         }
+    }
+
+    public static boolean checkFileExists(String filePath)
+    {
+        File file = new File(filePath);
+        return file.exists();
+    }
+
+    public static boolean createFile(String filePath) throws IOException
+    {
+        // 创建File对象
+        File file = new File(filePath);
+
+        // 检查文件是否已存在
+        if (file.exists())
+        {
+            return false; // 文件已存在，无法创建
+        }
+
+        // 创建新文件
+        return file.createNewFile();
     }
 }

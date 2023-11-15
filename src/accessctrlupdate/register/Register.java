@@ -1,12 +1,11 @@
-package src.accessctrl.register;
+package src.accessctrlupdate.register;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import src.accessctrl.FileEncryption;
-import src.accessctrl.accesslist.AccessCtrlList;
-import src.accessctrl.accesslist.JsonFileHandler;
+import src.accessctrlupdate.FileEncryption;
+import src.accessctrlupdate.accesslist.AccessCtrlList;
+import src.accessctrlupdate.accesslist.JsonFileHandler;
 
 import javax.crypto.SecretKey;
 import java.io.*;
@@ -20,7 +19,7 @@ import java.util.regex.Pattern;
 
 public class Register
 {
-    private static final String USER_FILE = "users_access.txt";
+    private static final String USER_FILE = ".\\src\\accessctrlupdate\\users_access.txt";
     private static ArrayList<User> registeredUsers;
 
 //    private static List<String> manager_access = Collections.singletonList("print,queue,topQueue,start,stop,restart,status,readConfig,setConfig");
@@ -114,6 +113,15 @@ public class Register
                             registerPassword2 = sc.next();
                             if (registerPassword.equals(registerPassword2))
                             {
+                                while(true)
+                                {
+                                    System.out.println("please choose the register role:[manager],[technician],[power],[ordinary]");
+                                    registerRole = sc.next();
+                                    if (registerRole.equals("manager") || registerRole.equals("technician") || registerRole.equals("power") || registerRole.equals("ordinary"))
+                                    {
+                                        break;
+                                    }
+                                }
                                 break;
                             }
 
@@ -156,7 +164,7 @@ public class Register
         writeUsersToFile(registeredUsers);
         writejson(registerUsername, registerRole);
         System.out.println("registration success！");
-        SecretKey readKey = FileEncryption.readKeyFromFile("access_secret.key");
+        SecretKey readKey = FileEncryption.readKeyFromFile(".\\src\\accessctrlupdate\\access_secret.key");
         if (readKey != null)
         {
             // 在这里使用读取的密钥进行操作
@@ -168,13 +176,13 @@ public class Register
         }
         try
         {
-            FileEncryption.encryptFile(".\\users_access.txt", ".\\users_access_encrypted.txt", readKey);
+            FileEncryption.encryptFile(".\\src\\accessctrlupdate\\users_access.txt", ".\\src\\accessctrlupdate\\users_access_encrypted.txt", readKey);
         }
         catch (Exception e)
         {
             throw new RuntimeException(e);
         }
-        Path filePath = Paths.get(".\\users_access.txt");
+        Path filePath = Paths.get(".\\src\\accessctrlupdate\\users_access.txt");
 
         try
         {
@@ -200,7 +208,7 @@ public class Register
             ObjectMapper objectMapper = new ObjectMapper();
 
             // Read RBAC policy
-            JsonNode rbacPolicyNode = objectMapper.readTree(new File(".\\rbac_policy.json"));
+            JsonNode rbacPolicyNode = objectMapper.readTree(new File(".\\src\\accessctrlupdate\\rbac_policy.json"));
 
             // Extract role and access rights from RBAC policy
             for (JsonNode roleNode : rbacPolicyNode.get("roles"))
@@ -252,7 +260,7 @@ public class Register
         }
         accessCtrlList.setName(name);
         accessCtrlList.setRole(role);
-        jsonFileHandler.writeToJsonFile(".\\rbac_user.json", accessCtrlList);
+        jsonFileHandler.writeToJsonFile(".\\src\\accessctrlupdate\\rbac_user.json", accessCtrlList);
     }
 
     public void login(Scanner sc)
@@ -300,7 +308,7 @@ public class Register
 
     public static ArrayList<User> readUsersFromFile()
     {
-        SecretKey readKey = FileEncryption.readKeyFromFile("access_secret.key");
+        SecretKey readKey = FileEncryption.readKeyFromFile(".\\src\\accessctrlupdate\\access_secret.key");
         if (readKey != null)
         {
             // 在这里使用读取的密钥进行操作
@@ -312,7 +320,7 @@ public class Register
         }
         try
         {
-            FileEncryption.decryptFile(".\\users_access_encrypted.txt", ".\\users_access.txt", readKey);
+            FileEncryption.decryptFile(".\\src\\accessctrlupdate\\users_access_encrypted.txt", ".\\src\\accessctrlupdate\\users_access.txt", readKey);
         }
         catch (Exception e)
         {
@@ -338,7 +346,7 @@ public class Register
         {
             // Handle any file reading errors
         }
-        Path filePath = Paths.get(".\\users_access.txt");
+        Path filePath = Paths.get(".\\src\\accessctrlupdate\\users_access.txt");
         try
         {
             // Delete the file

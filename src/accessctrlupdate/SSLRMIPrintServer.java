@@ -1,10 +1,9 @@
-package src.accessctrl;
+package src.accessctrlupdate;
 
 import java.io.File;
 import java.io.IOException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.Arrays;
 import javax.crypto.SecretKey;
 import javax.net.ssl.*;
 
@@ -21,7 +20,7 @@ public class SSLRMIPrintServer
 
             try
             {
-                SecretKey former_key = FileEncryption.readKeyFromFile("access_secret.key");
+                SecretKey former_key = FileEncryption.readKeyFromFile(".\\src\\accessctrlupdate\\access_secret.key");
                 if (former_key != null)
                 {
                     // using private key : TO DO
@@ -31,10 +30,10 @@ public class SSLRMIPrintServer
                 {
                     System.out.println("Failed to read key from file.");
                 }
-                FileEncryption.decryptFile(".\\users_access_encrypted.txt", ".\\users_access.txt", former_key);
+                FileEncryption.decryptFile(".\\src\\accessctrlupdate\\users_access_encrypted.txt", ".\\src\\accessctrlupdate\\users_access.txt", former_key);
                 secret_key = FileEncryption.generateSecretKey();
-                FileEncryption.saveKeyToFile(secret_key, "access_secret.key");
-                FileEncryption.encryptFile(".\\users_access.txt", ".\\users_access_encrypted.txt", secret_key);
+                FileEncryption.saveKeyToFile(secret_key, ".\\src\\accessctrlupdate\\access_secret.key");
+                FileEncryption.encryptFile(".\\src\\accessctrlupdate\\users_access.txt", ".\\src\\accessctrlupdate\\users_access_encrypted.txt", secret_key);
 
             }
             catch (Exception e)

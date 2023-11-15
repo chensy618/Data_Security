@@ -1,4 +1,4 @@
-package src.accessctrl.accesslist;
+package src.accessctrltask1.accesslist;
 
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,7 +32,7 @@ public class JsonFileHandler
             List<Map<String, Object>> existingUsers = readUsersFromFile(filePath);
 
             // Add the new user to the existing data
-            existingUsers.add(Map.of("username", accessList.username, "role", accessList.role, "access", accessList.method));
+            existingUsers.add(Map.of("username", accessList.username, "access", accessList.method));
 
             // Create a map with a "users" key and the list of users
             Map<String, List<Map<String, Object>>> data = Map.of("users", existingUsers);

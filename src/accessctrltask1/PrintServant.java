@@ -1,4 +1,4 @@
-package src.authentication;
+package src.accessctrltask1;
 
 import javax.crypto.SecretKey;
 import java.io.*;
@@ -16,7 +16,7 @@ public class PrintServant extends UnicastRemoteObject implements PrintService
 {
 
     private static Map<String, String> userPasswords;
-    private static String record_file = "./systemlog.txt";
+    private static String record_file = ".\\systemlog.txt";
     private static PrintWriter pw = null;
 
 
@@ -33,7 +33,7 @@ public class PrintServant extends UnicastRemoteObject implements PrintService
         // In a real application, you might read this data from a secure configuration or database
         try
         {
-            SecretKey readKey = FileEncryption.readKeyFromFile(".\\src\\authentication\\secret.key");
+            SecretKey readKey = FileEncryption.readKeyFromFile(".\\src\\accessctrltask1\\access_secret.key");
             if (readKey != null)
             {
                 // 在这里使用读取的密钥进行操作
@@ -45,13 +45,13 @@ public class PrintServant extends UnicastRemoteObject implements PrintService
             }
             try
             {
-                FileEncryption.decryptFile(".\\src\\authentication\\encrypted.txt", ".\\src\\authentication\\users.txt", readKey);
+                FileEncryption.decryptFile(".\\src\\accessctrltask1\\access_encrypted.txt", ".\\src\\accessctrltask1\\access_task1.txt", readKey);
             }
             catch (Exception e)
             {
                 throw new RuntimeException(e);
             }
-            FileReader fileReader = new FileReader(".\\src\\authentication\\users.txt");
+            FileReader fileReader = new FileReader(".\\src\\accessctrltask1\\access_task1.txt");
 
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String line;
@@ -69,7 +69,7 @@ public class PrintServant extends UnicastRemoteObject implements PrintService
             }
             // 关闭读取流
             bufferedReader.close();
-            Path filePath = Paths.get(".\\src\\authentication\\users.txt");
+            Path filePath = Paths.get(".\\src\\accessctrltask1\\access_task1.txt");
             try
             {
                 // Delete the file
@@ -187,7 +187,7 @@ public class PrintServant extends UnicastRemoteObject implements PrintService
     }
 
 
-    public void log(String username,String print) throws RemoteException
+    public void log(String username, String print) throws RemoteException
     {
         try
         {

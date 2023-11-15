@@ -1,29 +1,27 @@
-package src.authentication.register;
+package src.accessctrltask1.register;
 
-import src.authentication.FileEncryption;
+import src.accessctrltask1.FileEncryption;
 
 import javax.crypto.SecretKey;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
 public class Register
 {
-    private static final String USER_FILE = ".\\src\\authentication\\users.txt";
+    private static final String USER_FILE = ".\\src\\accessctrltask1\\access_task1.txt";
     private static ArrayList<User> registeredUsers;
-
 
     public static void main(String[] args)
     {
         registeredUsers = readUsersFromFile();
         Scanner sc = new Scanner(System.in);
-        System.out.println("Welcome to the Data Security Authentication Application");
+        System.out.println("Welcome to the Data Security Access Control Application");
         System.out.println("Please register your new user account");
         register(sc);
     }
@@ -33,12 +31,11 @@ public class Register
         registeredUsers = readUsersFromFile();
         String menu_select;
         Scanner sc = new Scanner(System.in);
-        System.out.println("Welcome to the Data Security Authentication Application");
+        System.out.println("Welcome to the Data Security Access Control Application");
         System.out.println("Please choose [1]:register or [2]:login");
         menu_select = sc.next();
         if (menu_select.equals("1"))
         {
-            System.out.println("The support country：Denmark, format:Country Code(45) + Phone number ");
             String reg = register(sc);
             if (reg.equals("true"))
             {
@@ -59,16 +56,17 @@ public class Register
 
     public static String register(Scanner sc)
     {
-        String registerPhone = "";
+        String registerUsername = "";
         String registerPassword = "";
         String registerPassword2 = "";
+        //String registerRole = "";
 
-        System.out.println("please input the mobile phone number：");
-        registerPhone = sc.next();
+        System.out.println("please input the user name：");
+        registerUsername = sc.next();
         while (true)
         {
 
-            if (registerPhone.length() == 10 && isMobile(registerPhone))
+            if (!registerUsername.isEmpty())
             {
                 if (registerPassword.equals(""))
                 {
@@ -97,6 +95,7 @@ public class Register
                             }
 
                         }
+
                         break;
                     }
                 }
@@ -118,10 +117,10 @@ public class Register
             {
                 while (true)
                 {
-                    System.out.println("wrong phone number format！");
-                    System.out.println("Enter phone number again：");
-                    registerPhone = sc.next();
-                    if (registerPhone.length() == 10 && isMobile(registerPhone))
+                    System.out.println("Username should not be empty！");
+                    System.out.println("Enter username again：");
+                    registerUsername = sc.next();
+                    if (!registerUsername.isEmpty())
                     {
                         break;
                     }
@@ -129,12 +128,11 @@ public class Register
             }
         }
 
-        User u = new User(registerPhone, registerPassword);
+        User u = new User(registerUsername, registerPassword);
         registeredUsers.add(u);
         writeUsersToFile(registeredUsers);
         System.out.println("registration success！");
-        //FileEncryption file_encrypted = new FileEncryption();
-        SecretKey readKey = FileEncryption.readKeyFromFile(".\\src\\authentication\\secret.key");
+        SecretKey readKey = FileEncryption.readKeyFromFile(".\\src\\accessctrltask1\\access_secret.key");
         if (readKey != null)
         {
             // 在这里使用读取的密钥进行操作
@@ -146,13 +144,13 @@ public class Register
         }
         try
         {
-            FileEncryption.encryptFile(".\\src\\authentication\\users.txt", ".\\src\\authentication\\encrypted.txt", readKey);
+            FileEncryption.encryptFile(".\\src\\accessctrltask1\\access_task1.txt", ".\\src\\accessctrltask1\\access_encrypted.txt", readKey);
         }
         catch (Exception e)
         {
             throw new RuntimeException(e);
         }
-        Path filePath = Paths.get(".\\src\\authentication\\users.txt");
+        Path filePath = Paths.get(".\\src\\accessctrltask1\\access_task1.txt");
 
         try
         {
@@ -170,18 +168,17 @@ public class Register
 
     }
 
-
     public void login(Scanner sc)
     {
         User u;
         String phone = "";
         String password = "";
-        System.out.println("Enter Phone Number: ");
+        System.out.println("Enter the username: ");
         phone = sc.next();
 
         for (int i = 0; i < registeredUsers.size(); i++)
         {
-            if (phone.equals(registeredUsers.get(i).getPhone()))
+            if (phone.equals(registeredUsers.get(i).getUsername()))
             {
                 u = registeredUsers.get(i);
                 System.out.println("Enter password: ");
@@ -216,7 +213,7 @@ public class Register
 
     public static ArrayList<User> readUsersFromFile()
     {
-        SecretKey readKey = FileEncryption.readKeyFromFile(".\\src\\authentication\\secret.key");
+        SecretKey readKey = FileEncryption.readKeyFromFile(".\\src\\accessctrltask1\\access_secret.key");
         if (readKey != null)
         {
             // 在这里使用读取的密钥进行操作
@@ -228,7 +225,7 @@ public class Register
         }
         try
         {
-            FileEncryption.decryptFile(".\\src\\authentication\\encrypted.txt", ".\\src\\authentication\\users.txt", readKey);
+            FileEncryption.decryptFile(".\\src\\accessctrltask1\\access_encrypted.txt", ".\\src\\accessctrltask1\\access_task1.txt", readKey);
         }
         catch (Exception e)
         {
@@ -241,10 +238,11 @@ public class Register
             while ((line = reader.readLine()) != null)
             {
                 String[] parts = line.split(",");
-                if (parts.length == 2)
+                if (parts.length == 3)
                 {
                     String phone = parts[0];
                     String password = parts[1];
+                    //String role = parts[2];
                     users.add(new User(phone, password));
                 }
             }
@@ -253,7 +251,7 @@ public class Register
         {
             // Handle any file reading errors
         }
-        Path filePath = Paths.get(".\\src\\authentication\\users.txt");
+        Path filePath = Paths.get(".\\src\\accessctrltask1\\access_task1.txt");
         try
         {
             // Delete the file
@@ -272,7 +270,7 @@ public class Register
         {
             for (User user : users)
             {
-                writer.write(user.getPhone() + "," + user.getPassword());
+                writer.write(user.getUsername() + "," + user.getPassword());
                 writer.newLine();
             }
         }

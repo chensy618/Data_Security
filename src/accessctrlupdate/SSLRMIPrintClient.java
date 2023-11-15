@@ -1,12 +1,10 @@
-package src.accessctrl;
+package src.accessctrlupdate;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import src.accessctrl.accesslist.JsonFileHandler;
-import src.accessctrl.register.Register;
+import src.accessctrlupdate.register.Register;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DatabindException;
 
 import java.io.File;
 import java.io.IOException;
@@ -160,7 +158,7 @@ public class SSLRMIPrintClient
         ObjectMapper objectMapper = new ObjectMapper();
 
         // Read RBAC policy
-        JsonNode rbacPolicyNode = objectMapper.readTree(new File(".\\rbac_user.json"));
+        JsonNode rbacPolicyNode = objectMapper.readTree(new File(".\\src\\accessctrlupdate\\rbac_user.json"));
         Map<String, List<String>> roleAccessMap = new HashMap<>();
 
         // Extract role and access rights from RBAC policy
@@ -174,7 +172,7 @@ public class SSLRMIPrintClient
         }
 
         // Read user policy
-        JsonNode userPolicyNode = objectMapper.readTree(new File(".\\rbac_user.json"));
+        JsonNode userPolicyNode = objectMapper.readTree(new File(".\\src\\accessctrlupdate\\rbac_user.json"));
 
         // Find user's role
         String userRole = null;

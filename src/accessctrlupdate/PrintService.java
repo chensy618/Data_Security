@@ -1,9 +1,7 @@
-package src.accessctrl;
+package src.accessctrlupdate;
 
-import javax.crypto.SecretKey;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.security.Key;
 
 public interface PrintService extends Remote
 {

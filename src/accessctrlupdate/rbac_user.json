@@ -1,0 +1,7 @@
+{
+  "users" : [ {
+    "access" : [ "print", "queue", "restart", "topQueue", "start", "stop", "restart", "status", "readConfig", "setConfig" ],
+    "role" : "manager",
+    "username" : "siyan"
+  }]
+}
