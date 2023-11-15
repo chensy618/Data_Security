@@ -1,25 +1,25 @@
 {
   "users" : [ {
     "username" : "Alice",
-    "role" : "manager"
+    "access" : [ "print", "queue", "restart", "topQueue", "start", "stop", "restart", "status", "readConfig", "setConfig" ]
   }, {
     "username" : "Bob",
-    "role" : "technician"
+    "access" : [ "start", "stop", "restart", "status", "readConfig", "setConfig" ]
   }, {
     "username" : "Cecilie",
-    "role" : "power"
+    "access" : [ "print", "queue", "restart", "topQueue" ]
   }, {
     "username" : "David",
-    "role" : "ordinary"
+    "access" : [ "print", "queue" ]
   }, {
     "username" : "Erica",
-    "role" : "ordinary"
+    "access" : [ "print", "queue" ]
   }, {
     "username" : "Fred",
-    "role" : "ordinary"
+    "access" : [ "print", "queue" ]
   }, {
     "username" : "George",
-    "role" : "ordinary"
+    "access" : [ "print", "queue" ]
   }
   ]
 }
