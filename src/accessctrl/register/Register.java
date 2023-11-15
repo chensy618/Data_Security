@@ -252,7 +252,7 @@ public class Register
         }
         accessCtrlList.setName(name);
         accessCtrlList.setRole(role);
-        jsonFileHandler.writeToJsonFile(".\\aclist_policy_dynamic.json", accessCtrlList);
+        jsonFileHandler.writeToJsonFile(".\\rbac_user.json", accessCtrlList);
     }
 
     public void login(Scanner sc)

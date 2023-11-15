@@ -160,7 +160,7 @@ public class SSLRMIPrintClient
         ObjectMapper objectMapper = new ObjectMapper();
 
         // Read RBAC policy
-        JsonNode rbacPolicyNode = objectMapper.readTree(new File(".\\aclist_policy_dynamic.json"));
+        JsonNode rbacPolicyNode = objectMapper.readTree(new File(".\\rbac_user.json"));
         Map<String, List<String>> roleAccessMap = new HashMap<>();
 
         // Extract role and access rights from RBAC policy
@@ -174,7 +174,7 @@ public class SSLRMIPrintClient
         }
 
         // Read user policy
-        JsonNode userPolicyNode = objectMapper.readTree(new File(".\\aclist_policy_dynamic.json"));
+        JsonNode userPolicyNode = objectMapper.readTree(new File(".\\rbac_user.json"));
 
         // Find user's role
         String userRole = null;
